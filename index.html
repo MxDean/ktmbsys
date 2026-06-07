@@ -7,6 +7,32 @@
     <!-- External CSS -->
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* Button group styling for Calculate & Reset */
+        .button-group {
+            display: flex;
+            gap: 15px;
+            margin-top: 28px;
+        }
+        .button-group button {
+            flex: 1;
+            margin-top: 0;
+        }
+        .btn-reset {
+            background: linear-gradient(90deg, #475569, #334155);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+        }
+        .btn-reset:hover {
+            background: linear-gradient(90deg, #5A6B7C, #475569);
+            transform: scale(1.01);
+        }
+        @media (max-width: 600px) {
+            .button-group {
+                flex-direction: column;
+                gap: 12px;
+            }
+        }
+    </style>
 </head>
 <body>
 
@@ -64,10 +90,16 @@
     <label> <span class="signal-icon red"></span> Required System Margin (dB) </label>
     <input type="number" id="margin" value="3" step="0.5">
     
-    <button onclick="calculateLoss()"> 
-        <span class="signal-icon" style="width:18px;height:18px;"></span> CALCULATE OPTICAL BUDGET 
-        <span class="signal-icon green" style="width:18px;height:18px;"></span>
-    </button>
+    <div class="button-group">
+        <button onclick="calculateLoss()"> 
+            <span class="signal-icon" style="width:18px;height:18px;"></span> CALCULATE 
+            <span class="signal-icon green" style="width:18px;height:18px;"></span>
+        </button>
+        <button onclick="resetForm()" class="btn-reset">
+            <span class="signal-icon red" style="width:18px;height:18px;"></span> RESET ALL
+            <span class="signal-icon" style="width:18px;height:18px;"></span>
+        </button>
+    </div>
 </div>
 
 <div class="result">
