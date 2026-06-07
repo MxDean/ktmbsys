@@ -1,163 +1,90 @@
 <!DOCTYPE html>
-
-<html>
-
+<html lang="en">
 <head>
-
-<meta charset="UTF-8">
-
-<meta name="viewport"
-content="width=device-width, initial-scale=1.0">
-
-<title>
-Fiber Loss Calculator v1
-</title>
-
-<link rel="stylesheet"
-href="style.css">
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>KTMB Fiber Loss Calculator | Railway Comms Link Budget</title>
+    <!-- External CSS -->
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;600;700;800&display=swap" rel="stylesheet">
 </head>
-
 <body>
 
 <div class="header">
-
-<h1>
-FIBER LOSS CALCULATOR
-</h1>
-
-<p>
-KTMB System
-</p>
-
+    <div class="brand">
+        <div class="logo-container">
+            <img src="/FiberLossCalculator/ktmb-logo.png" alt="KTMB Logo" onerror="this.src='https://placehold.co/60x60/1E293B/38BDF8?text=KTMB'; this.style.borderRadius='50%';">
+        </div>
+        <div class="title-text">
+            <h1>⚡ FIBER LOSS CALCULATOR</h1>
+            <p>RAILWAY COMMS OPTICAL LINK BUDGET • KTMB INTEGRATED SYSTEM</p>
+        </div>
+    </div>
+    <div class="clock-container">
+        <div id="clock">
+            <span class="date-part">📅 --/--/----</span>
+            <span class="time-part">⏱️ --:--:-- --</span>
+        </div>
+    </div>
 </div>
 
 <div class="dashboard">
-
-<div class="kpi">
-
-<h3>DISTANCE</h3>
-
-<h2 id="distanceKPI">
-0 km
-</h2>
-
-</div>
-
-<div class="kpi">
-
-<h3>TOTAL LOSS</h3>
-
-<h2 id="lossKPI">
-0 dB
-</h2>
-
-</div>
-
-<div class="kpi">
-
-<h3>MARGIN</h3>
-
-<h2 id="marginKPI">
-0 dB
-</h2>
-
-</div>
-
-<div class="kpi">
-
-<h3>STATUS</h3>
-
-<h2 id="statusKPI">
-READY
-</h2>
-
-</div>
-
+    <div class="kpi distance-card">
+        <h3><span class="signal-icon green"></span> DISTANCE</h3>
+        <h2 id="distanceKPI">0.00 km</h2>
+    </div>
+    <div class="kpi loss-card">
+        <h3><span class="signal-icon yellow"></span> TOTAL LOSS</h3>
+        <h2 id="lossKPI">0.00 dB</h2>
+    </div>
+    <div class="kpi margin-card">
+        <h3><span class="signal-icon"></span> SYSTEM MARGIN</h3>
+        <h2 id="marginKPI">0.00 dB</h2>
+    </div>
+    <div class="kpi status-card">
+        <div class="status-led"></div>
+        <h3><span class="signal-icon red"></span> LINK STATUS</h3>
+        <h2 id="statusKPI" style="font-size: 32px;">READY</h2>
+    </div>
 </div>
 
 <div class="card">
-
-<h2>LINK INFORMATION</h2>
-
-<label>
-Distance (km)
-</label>
-
-<input
-type="number"
-id="distance">
-
-<label>
-Fiber Loss (dB/km)
-</label>
-
-<input
-type="number"
-id="attenuation"
-value="0.35">
-
-<label>
-Connector Qty
-</label>
-
-<input
-type="number"
-id="connector">
-
-<label>
-Splice Qty
-</label>
-
-<input
-type="number"
-id="splice">
-
-<label>
-System Margin (dB)
-</label>
-
-<input
-type="number"
-id="margin"
-value="3">
-
-<button onclick="calculate()">
-
-CALCULATE
-
-</button>
-
+    <label> <span class="signal-icon green" style="animation: blinkRailGreen 1.2s infinite;"></span> Fiber Distance (km) <span style="font-size:12px; margin-left:auto;">span length</span></label>
+    <input type="number" id="distance" placeholder="e.g., 15.2" step="any" value="0">
+    
+    <label> <span class="signal-icon yellow"></span> Fiber Attenuation (dB/km) </label>
+    <input type="number" id="attenuation" value="0.35" step="0.01">
+    
+    <label> <span class="signal-icon"></span> Connector Quantity <span style="font-size:12px;">(0.3 dB each)</span></label>
+    <input type="number" id="connector" value="0" step="1" min="0">
+    
+    <label> <span class="signal-icon green"></span> Splice Quantity <span style="font-size:12px;">(0.1 dB each)</span></label>
+    <input type="number" id="splice" value="0" step="1" min="0">
+    
+    <label> <span class="signal-icon red"></span> Required System Margin (dB) </label>
+    <input type="number" id="margin" value="3" step="0.5">
+    
+    <button onclick="calculateLoss()"> 
+        <span class="signal-icon" style="width:18px;height:18px;"></span> CALCULATE OPTICAL BUDGET 
+        <span class="signal-icon green" style="width:18px;height:18px;"></span>
+    </button>
 </div>
 
 <div class="result">
-
-<h2>
-CALCULATION RESULT
-</h2>
-
-<p id="fiberLoss">
-Fiber Loss : 0 dB
-</p>
-
-<p id="connectorLoss">
-Connector Loss : 0 dB
-</p>
-
-<p id="spliceLoss">
-Splice Loss : 0 dB
-</p>
-
-<p id="totalLoss">
-Total Loss : 0 dB
-</p>
-
+    <h2> 📡 LINK LOSS BREAKDOWN <span style="font-size:12px; background:#0F172A; padding:4px 12px; border-radius:40px;"><span class="field-signal"></span> PRECISION</span></h2>
+    <p id="fiberLoss">🔹 Fiber Attenuation : <span class="value-badge">0.00 dB</span></p>
+    <p id="connectorLoss">🔹 Connector Loss : <span class="value-badge">0.00 dB</span></p>
+    <p id="spliceLoss">🔹 Splice Loss : <span class="value-badge">0.00 dB</span></p>
+    <p id="totalLoss" style="border-bottom: 2px solid #38BDF8;">📊 TOTAL LOSS (incl. margin) : <span class="value-badge">0.00 dB</span></p>
+    <p id="linkAdvice" style="border-bottom: none; font-size: 15px; color: #94A3B8; display: flex; align-items: center; gap: 12px;"><span class="signal-icon red"></span> Threshold ≤20 dB = PASS | >20 dB = FAIL</p>
 </div>
 
-<script src="script.js">
+<div class="author-footer">
+    <span>✧ Author : <span class="author-name">MxDean72</span> ✧</span>
+    <span>| KTMB Optical Integrity v2.0 |</span>
+</div>
 
-</script>
-
+<!-- External JavaScript -->
+<script src="script.js"></script>
 </body>
-
 </html>
